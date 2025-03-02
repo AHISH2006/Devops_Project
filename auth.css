@@ -1,0 +1,357 @@
+body {
+    background-color: #fce4e4;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  
+  .container,.auth-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    
+  }
+  
+  .logo {
+    width: 150px;
+    margin-bottom: 20px;
+  }
+  
+  .auth-box {
+    background: rgb(255, 255, 255);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    
+  }
+  
+  .input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #efefef;
+    border-radius: 5px;
+  }
+  
+  .btn {
+    background: purple;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn:hover {
+    background: darkviolet;
+  }
+  
+  .links {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-top: 10px;
+  }
+  
+  .links span {
+    color: purple;
+    cursor: pointer;
+  }
+  
+  .social-icons {
+    margin-top: 15px;
+  }
+  
+  .social-icons i {
+    font-size: 24px;
+    margin: 0 10px;
+    cursor: pointer;
+    color: #333;
+  }
+  .auth-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+  }
+  
+  .logo {
+    width: 120px;
+    margin-bottom: 20px;
+  }
+  
+  .input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .btn {
+    background-color: purple;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .btn:hover {
+    background-color: darkviolet;
+  }
+  
+  .link {
+    color: purple;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .link:hover {
+    text-decoration: underline;
+  }
+  .auth-container,.container {
+    width: 90%;
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    text-align: center;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    font-size: 22px;
+    color: black;
+  }
+  
+  p {
+    font-size: 14px;
+    color: gray;
+  }
+  .auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+  }
+  
+  input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .btn ,.pass,.btn secondary{
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: purple;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .btn:hover{
+    background-color: rgb(148, 0, 211);
+  }
+  
+  .btn.secondary {
+    background-color: #800080  ;
+  }
+  
+  .btn.secondary:hover {
+    background-color:rgb(148, 0, 211);
+  }
+  .social-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+  }
+  
+  .social-icon {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .social-icon:hover {
+    transform: scale(1.1);
+  }
+  /* Center the form */
+/* Center the form */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
+}
+
+/* Form Styling */
+.auth-form {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  text-align: center;
+}
+
+/* Logo */
+.logo {
+  width: 80px;
+  margin: 0 auto;
+}
+
+/* Form Heading */
+.auth-form h2 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Input Fields */
+.auth-form label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+  text-align: left;
+}
+
+.auth-form input,
+.auth-form select {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: 0.3s ease-in-out;
+}
+
+.auth-form input:focus,
+.auth-form select:focus {
+  border-color: purple;
+}
+
+/* Signup Button */
+.auth-form button {
+  background: purple;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 10px;
+}
+
+.auth-form button:hover {
+  background: rgb(255, 95, 255);
+}
+
+/* Divider */
+.divider {
+  margin: 10px 0;
+  font-size: 14px;
+  color: #777;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  display: block;
+  width: 40%;
+  height: 1px;
+  background: #ddd;
+  position: absolute;
+  top: 50%;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+/* Social Buttons */
+.social-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.google-btn,
+.facebook-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+}
+
+.google-btn {
+  background: #db4437;
+  color: white;
+}
+
+.google-btn:hover {
+  background: #c1351d;
+}
+
+
+
+.icon {
+  font-size: 18px;
+}
+
+/* Redirect Text */
+.redirect-text {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+.redirect-text span {
+  color: #007bff;
+  cursor: pointer;
+}
+
+.redirect-text span:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+
+
+
