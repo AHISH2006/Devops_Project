@@ -8,7 +8,7 @@ import DoctorHome from "../pages/DoctorHome";
 import PatientHome from "../pages/PatientHome";
 import SignupPage from "../pages/SignupPage";
 import ReportsPage from "../pages/ReportsPage";
-import EMGSession from "../pages/EMGSession";
+import DeviceControl from "../pages/DeviceControl";
 import CreateSession from "../pages/CreateSession";
 import Programs from "../pages/Programs";
 import DeviceManagement from "../pages/DeviceManagement";
@@ -27,7 +27,7 @@ const AppRoutes = () => {
         <Route path="/Account" element={<AccountPage/>} />
         <Route path="/DoctorHome" element={<DoctorHome/>} />
         <Route path="/reports" element={<ReportsPage />} />
-        <Route path="/EMG" element={<EMGSession />} />
+        <Route path="/devicecontrol" element={<DeviceControl />} />
         <Route path="/programs" element={<Programs />} />
         <Route path="/PatientHome" element={<PatientHome/>} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

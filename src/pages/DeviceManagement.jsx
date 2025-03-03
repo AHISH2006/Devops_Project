@@ -85,10 +85,12 @@ const DeviceManagement = () => {
             <FaPen />
             <span>Manual Entry</span>
           </button>
-          <button className="option-btn" onClick={handleQRScanner}>
-            <FaQrcode />
-            <span>Scan QR Code</span>
-          </button>
+          {selectedDevice === 'EMS' && (
+            <button className="option-btn" onClick={handleQRScanner}>
+              <FaQrcode />
+              <span>Scan QR Code</span>
+            </button>
+          )}
         </div>
       </div>
     </div>
