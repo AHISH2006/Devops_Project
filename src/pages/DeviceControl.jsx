@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft, FaPlusCircle, FaListAlt, FaUserMd, FaHistory } from 'react-icons/fa';
 import '../styles/emg.css';
 
-const EMGSession = () => {
+const DeviceControl= () => {
   const navigate = useNavigate();
 
   const sessionButtons = [

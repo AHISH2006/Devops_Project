@@ -28,7 +28,6 @@ const DoctorHome = () => {
   }, [isSidebarOpen]);
 
   const sidebarItems = [
-    { icon: "👤", title: "Accounts", path: '/Account' },
     { icon: "📋", title: "Health Reports", path: '/reports' },
     { icon: "💬", title: "Messages", path: '/messages' },
     { icon: "⚙️", title: "Settings", path: '/settings' },
@@ -73,6 +72,79 @@ const DoctorHome = () => {
           <h3>Menu</h3>
         </div>
         <div className="sidebar-content">
+          {/* Doctor Profile Section */}
+          <div className="doctor-profile-section">
+            <div className="profile-avatar">
+              <FaUser className="avatar-icon" />
+            </div>
+            
+            {showProfileEdit ? (
+              <form className="profile-edit-form" onSubmit={handleProfileSubmit}>
+                <div className="form-group">
+                  <label>Name</label>
+                  <input 
+                    type="text" 
+                    name="name" 
+                    value={doctorProfile.name} 
+                    onChange={handleProfileChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Specialty</label>
+                  <input 
+                    type="text" 
+                    name="specialty" 
+                    value={doctorProfile.specialty} 
+                    onChange={handleProfileChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Email</label>
+                  <input 
+                    type="email" 
+                    name="email" 
+                    value={doctorProfile.email} 
+                    onChange={handleProfileChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Phone</label>
+                  <input 
+                    type="text" 
+                    name="phone" 
+                    value={doctorProfile.phone} 
+                    onChange={handleProfileChange}
+                  />
+                </div>
+                <div className="profile-edit-actions">
+                  <button type="submit" className="save-profile-btn">Save</button>
+                  <button 
+                    type="button" 
+                    className="cancel-edit-btn"
+                    onClick={() => setShowProfileEdit(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className="profile-info">
+                <h4>{doctorProfile.name}</h4>
+                <p className="profile-specialty">{doctorProfile.specialty}</p>
+                <p className="profile-email">{doctorProfile.email}</p>
+                <p className="profile-phone">{doctorProfile.phone}</p>
+                <button 
+                  className="edit-profile-btn"
+                  onClick={() => setShowProfileEdit(true)}
+                >
+                  <FaEdit /> Edit Profile
+                </button>
+              </div>
+            )}
+          </div>
+          
+          <div className="sidebar-divider"></div>
+
           <div className="sidebar-menu">
             {sidebarItems.map((item, index) => (
               <button
@@ -122,7 +194,7 @@ const DoctorHome = () => {
 
         <h3 className="section-title">Quick Actions</h3>
         <div className="quick-actions">
-          <button onClick={() => navigate("/EMG")} className="action-btn">
+          <button onClick={() => navigate("/devicecontrol")} className="action-btn">
             ⚙️ Device Control
           </button>
           <button onClick={() => navigate("/device-management", { state: { from: '/Doctorhome' } })} className="action-btn">📟Device Management</button>
