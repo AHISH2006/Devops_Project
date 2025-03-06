@@ -130,13 +130,13 @@ const AccountPage = () => {
       {showMediaOptions && (
         <div className="media-options-modal">
           <div className="media-options-content">
-            <button onClick={() => handleMediaSelect('camera')}>
+            <button className="back-btn" onClick={() => handleMediaSelect('camera')}>
               <FaCamera /> Take Photo
             </button>
-            <button onClick={() => handleMediaSelect('gallery')}>
+            <button className="back-btn" onClick={() => handleMediaSelect('gallery')}>
               <FaImage /> Choose from Gallery
             </button>
-            <button onClick={() => setShowMediaOptions(false)} className="cancel-btn">
+            <button  onClick={() => setShowMediaOptions(false)} className="back-btn">
               Cancel
             </button>
           </div>

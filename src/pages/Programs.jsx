@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft, FaCheckCircle, FaPlusCircle } from 'react-icons/fa';
-import '../styles/emg.css';
+import TicTacToe from '../components/TicTacToe';
+import '../styles/devicecontrol.css';
 
 const Programs = () => {
   const navigate = useNavigate();
@@ -39,71 +40,25 @@ const Programs = () => {
   return (
     <div className="programs-page">
       <nav className="programs-navbar">
-        <button className="back-btn" onClick={() => navigate(-1)}>
+        <button className="back-btn" onClick={() => navigate("/devicecontrol")}>
           <FaArrowLeft /> Back
         </button>
-        <h2>Programs</h2>
+        <h2>EMG Programs</h2>
       </nav>
 
-      {!showCreateForm ? (
-        <div className="programs-container">
-          <button className="create-program-button" onClick={handleCreateProgram}>
-            <FaPlusCircle className="plus-icon" />
-            <span>Create New Program</span>
-          </button>
+      <div className="content-wrapper">
+        <h1>Treatment Programs</h1>
+        <p>Manage your EMG treatment programs and play a relaxing game while you wait</p>
+        
+        <div className="create-program-button">
+          <span className="plus-icon">+</span>
+          <span>Create New Program</span>
+        </div>
 
-          <div className="programs-list">
-            {programs.map((program, index) => (
-              <div key={index} className="program-item">
-                <h3>{program.name}</h3>
-                <p>{program.description}</p>
-                <div className="program-actions">
-                  <button className="edit-btn">Edit</button>
-                  <button className="delete-btn">Delete</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div className="create-program-form">
-          <form onSubmit={handleSave}>
-            <div className="form-field">
-              <label>Program Name</label>
-              <input
-                type="text"
-                name="name"
-                value={newProgram.name}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div className="form-field">
-              <label>Description</label>
-              <textarea
-                name="description"
-                value={newProgram.description}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <button type="submit" className="save-btn">
-              Save
-            </button>
-          </form>
-        </div>
-      )}
-
-      {showSuccess && (
-        <div className="success-modal">
-          <div className="success-content">
-            <FaCheckCircle className="success-icon" />
-            <h2>Program Saved Successfully!</h2>
-          </div>
-        </div>
-      )}
+        <TicTacToe />
+      </div>
     </div>
   );
 };
 
-export default Programs;
+export default Programs

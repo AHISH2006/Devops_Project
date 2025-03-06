@@ -1,0 +1,87 @@
+.game-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  
+  .game-container h2 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+  }
+  
+  .status {
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    color: purple;
+    font-weight: 500;
+  }
+  
+  .game-board {
+    display: inline-block;
+    background: #f8e4ff;
+    padding: 1rem;
+    border-radius: 12px;
+  }
+  
+  .board-row {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .square {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border: 2px solid purple;
+    margin: 4px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: purple;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+  }
+  
+  .square:hover {
+    background: #faf4ff;
+    transform: scale(1.05);
+  }
+  
+  .reset-button {
+    margin-top: 1.5rem;
+    padding: 0.8rem 2rem;
+    background: purple;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .reset-button:hover {
+    background: rgb(128, 0, 170);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(128, 0, 128, 0.2);
+  }
+  
+  @media (max-width: 480px) {
+    .game-container {
+      padding: 1rem;
+      margin: 1rem;
+    }
+  
+    .square {
+      width: 60px;
+      height: 60px;
+      font-size: 1.5rem;
+    }
+  }

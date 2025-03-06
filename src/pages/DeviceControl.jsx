@@ -1,17 +1,37 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaPlusCircle, FaListAlt, FaUserMd, FaHistory } from 'react-icons/fa';
-import '../styles/emg.css';
+import { FaArrowLeft, FaPlusCircle, FaListAlt, FaUserMd, FaHistory, FaBars, FaMicrochip, FaBolt } from 'react-icons/fa';
+import '../styles/devicecontrol.css';
 
-const DeviceControl= () => {
+const DeviceControl = () => {
   const navigate = useNavigate();
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedDevice, setSelectedDevice] = useState(null);
+  const sidebarRef = useRef(null);
+  const menuButtonRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        isSidebarOpen &&
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target) &&
+        !menuButtonRef.current.contains(event.target)
+      ) {
+        setSidebarOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isSidebarOpen]);
 
   const sessionButtons = [
     {
-      title: 'Create EMG Session',
+      title: 'Create Session',
       icon: <FaPlusCircle />,
-      path: '/create-session',
-      description: 'Start a new EMG treatment session'
+      onClick: () => navigate('/create-session', { state: { deviceType: selectedDevice }}),
+      description: `Start a new ${selectedDevice} treatment session`
     },
     {
       title: 'Programs',
@@ -33,37 +53,91 @@ const DeviceControl= () => {
     }
   ];
 
+  const handleDeviceClick = (device) => {
+    setSelectedDevice(device);
+  };
+
+  const handleButtonClick = (button) => {
+    if (button.onClick) {
+      button.onClick();
+    } else {
+      navigate(button.path);
+    }
+  };
+
   return (
-    <div className="emg-container">
-      <nav className="emg-navbar">
-        <button className="back-btn" onClick={() => navigate("/doctorhome")}>
-          <FaArrowLeft /> Back
-        </button>
-        <h2>EMG Session Management</h2>
+    <div className="device-container">
+      <nav className="device-navbar">
+        <div className="nav-left">
+          <button className="back-btn" onClick={() => navigate("/doctorhome")}>
+            <FaArrowLeft /> Back
+          </button>
+          <button
+            ref={menuButtonRef}
+            className="sidebar-toggle"
+            onClick={() => setSidebarOpen(!isSidebarOpen)}
+          >
+            <FaBars />
+          </button>
+          <h2>Device Control Portal</h2>
+        </div>
       </nav>
 
-      <div className="welcome-section">
-        <h1>Welcome to EMG Session Portal</h1>
-        <p>Select an option to begin your session management</p>
+      <div ref={sidebarRef} className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
+        <div className="sidebar-header">
+          <h3>Device Control</h3>
+        </div>
+        <div className="device-options">
+          <button
+            className={`device-option ${selectedDevice === 'EMG' ? 'active' : ''}`}
+            onClick={() => handleDeviceClick('EMG')}
+          >
+            <FaMicrochip className="option-icon" />
+            <span>EMG Devices</span>
+          </button>
+          <button
+            className={`device-option ${selectedDevice === 'EMS' ? 'active' : ''}`}
+            onClick={() => handleDeviceClick('EMS')}
+          >
+            <FaBolt className="option-icon" />
+            <span>EMS Devices</span>
+          </button>
+        </div>
       </div>
 
-      <div className="session-options">
-        {sessionButtons.map((button, index) => (
-          <button 
-            key={index}
-            className="session-card"
-            onClick={() => navigate(button.path)}
-          >
-            <div className="card-icon">
-              {button.icon}
+      <main className={`main-content ${isSidebarOpen ? 'shifted' : ''}`}>
+        {selectedDevice ? (
+          <>
+            <div className="welcome-section">
+              <h1>Welcome to {selectedDevice} Session Portal</h1>
+              <p>Select an option to begin your session management</p>
             </div>
-            <div className="card-content">
-              <h3>{button.title}</h3>
-              <p>{button.description}</p>
+
+            <div className="session-options">
+              {sessionButtons.map((button, index) => (
+                <button 
+                  key={index}
+                  className="session-card"
+                  onClick={() => handleButtonClick(button)}
+                >
+                  <div className="card-icon">
+                    {button.icon}
+                  </div>
+                  <div className="card-content">
+                    <h3>{button.title}</h3>
+                    <p>{button.description}</p>
+                  </div>
+                </button>
+              ))}
             </div>
-          </button>
-        ))}
-      </div>
+          </>
+        ) : (
+          <div className="welcome-message">
+            <h2>Welcome to Device Control</h2>
+            <p>Select a device type from the sidebar to begin</p>
+          </div>
+        )}
+      </main>
     </div>
   );
 };

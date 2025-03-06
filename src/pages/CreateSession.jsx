@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FaArrowLeft, FaCalendarAlt, FaClock, FaUserAlt, FaDesktop, FaBolt, FaSync, FaClinicMedical, FaCheckCircle } from 'react-icons/fa';
-import '../styles/emg.css';
+import '../styles/devicecontrol.css';
 
 const CreateSession = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const deviceType = location.state?.deviceType || '';
+
   const [sessionData, setSessionData] = useState({
     patient: '',
     dateTime: '',
@@ -53,7 +56,7 @@ const CreateSession = () => {
     setShowSuccess(true);
     setTimeout(() => {
       setShowSuccess(false);
-      navigate('/emg-session');
+      navigate('/device-control');
     }, 2000);
   };
 
@@ -63,7 +66,7 @@ const CreateSession = () => {
         <button className="back-button" onClick={() => navigate(-1)}>
           <FaArrowLeft /> Back
         </button>
-        <h1>Create New Session</h1>
+        <h1>Create New {deviceType} Session</h1>
       </nav>
 
       <div className="session-form-container">
@@ -114,38 +117,42 @@ const CreateSession = () => {
             />
           </div>
 
-          <div className="form-group">
-            <label>Treatment Type</label>
-            <div className="treatment-grid">
-              {treatmentTypes.map((treatment) => (
-                <button
-                  key={treatment.id}
-                  type="button"
-                  className={`treatment-btn ${sessionData.treatmentType === treatment.id ? 'active' : ''}`}
-                  onClick={() => handleTreatmentSelect(treatment.id)}
-                >
-                  <span className="treatment-icon">{treatment.icon}</span>
-                  <span>{treatment.name}</span>
-                </button>
-              ))}
-            </div>
-          </div>
+          {deviceType === 'EMS' && (
+            <>
+              <div className="form-group">
+                <label>Treatment Type</label>
+                <div className="treatment-grid">
+                  {treatmentTypes.map((treatment) => (
+                    <button
+                      key={treatment.id}
+                      type="button"
+                      className={`treatment-btn ${sessionData.treatmentType === treatment.id ? 'active' : ''}`}
+                      onClick={() => handleTreatmentSelect(treatment.id)}
+                    >
+                      <span className="treatment-icon">{treatment.icon}</span>
+                      <span>{treatment.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-          <div className="form-group">
-            <label>Intensity Level</label>
-            <div className="intensity-buttons">
-              {intensityLevels.map((level) => (
-                <button
-                  key={level}
-                  type="button"
-                  className={`intensity-btn ${sessionData.intensity === level ? 'active' : ''}`}
-                  onClick={() => handleIntensitySelect(level)}
-                >
-                  {level}
-                </button>
-              ))}
-            </div>
-          </div>
+              <div className="form-group">
+                <label>Intensity Level</label>
+                <div className="intensity-buttons">
+                  {intensityLevels.map((level) => (
+                    <button
+                      key={level}
+                      type="button"
+                      className={`intensity-btn ${sessionData.intensity === level ? 'active' : ''}`}
+                      onClick={() => handleIntensitySelect(level)}
+                    >
+                      {level}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
 
           <div className="form-group">
             <label>Notes</label>
