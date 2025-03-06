@@ -1,95 +1,38 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import "../styles/doctorHome.css";
-import { FaUser, FaSignOutAlt, FaBell } from 'react-icons/fa';
-import { FiMenu } from "react-icons/fi";
+import { FaHome, FaMicrochip, FaCog, FaFileAlt, FaBell, FaUser } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 
 const DoctorHome = () => {
   const navigate = useNavigate();
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const sidebarRef = useRef(null);
-  const menuButtonRef = useRef(null);
+  const [activeTab, setActiveTab] = useState('home');
+  
   const recentActivities = [
     { icon: "🆕", title: "New Appointment", time: "2 mins ago" },
     { icon: "📡", title: "Device Status Update", time: "1 hour ago" },
     { icon: "📜", title: "Report Generated", time: "3 hours ago" }
   ];
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        isSidebarOpen &&
-        sidebarRef.current &&
-        !sidebarRef.current.contains(event.target) &&
-        !menuButtonRef.current.contains(event.target)
-      ) {
-        setSidebarOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isSidebarOpen]);
-
-  const sidebarItems = [
-    { icon: "👤", title: "Account", path: '/Account' },
-    { icon: "📋", title: "Reports", path: '/reports' },
-    { icon: "⚙️", title: "Settings", path: '/settings' },
-    { icon: <FaSignOutAlt />, title: 'Logout', path: '/login' }
-  ];
-
-  const handleSidebarItemClick = (path) => {
-    navigate(path);
-    setSidebarOpen(false);
+  const handleNavigation = (path, tab) => {
+    setActiveTab(tab);
+    if (path === '/device-management') {
+      navigate(path, { state: { role: 'doctor' } });
+    } else {
+      navigate(path);
+    }
   };
 
   return (
     <div className="doctor-home">
       <div className="top-nav">
-        <button
-          ref={menuButtonRef}
-          className="menu-icon-btn"
-          onClick={() => setSidebarOpen(!isSidebarOpen)}
-        >
-          <FiMenu />
-        </button>
-        <h2>Welcome</h2>
+        <div className="user-profile">
+          <FaUser onClick={()=>navigate("/Account")} className="user-icon" />
+        </div>
+        <h2>Welcome Doctor</h2>
         <FaBell className="notification-icon" />
       </div>
 
-      <div ref={sidebarRef} className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-        <div className="sidebar-header">
-          <h3>Menu</h3>
-        </div>
-        <div className="sidebar-content">
-          <div className="sidebar-menu">
-            {sidebarItems.map((item, index) => (
-              <button
-                key={index}
-                className="sidebar-item"
-                onClick={() => handleSidebarItemClick(item.path)}
-              >
-                <span className="item-icon">{item.icon}</span>
-                <span className="item-title">{item.title}</span>
-              </button>
-            ))}
-            <div className="sidebar-activities">
-            <h3>Recent Activities</h3>
-              {recentActivities.map((activity, index) => (
-                <div key={index} className="sidebar-activity-item">
-                  <div className="activity-icon">{activity.icon}</div>
-                  <div className="activity-details">
-                    <h4>{activity.title}</h4>
-                    <span className="activity-time">{activity.time}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className={`main-content ${isSidebarOpen ? 'shifted' : ''}`}>
+      <div className="main-content">
         <p className="greeting">Have a great day ahead</p>
 
         <div className="stats-container">
@@ -99,22 +42,50 @@ const DoctorHome = () => {
           <button className="stat-box">⏳ Hours Active</button>
         </div>
 
-        <h3 className="section-title">Quick Actions</h3>
-        <div className="quick-actions">
-          <button onClick={() => navigate("/devicecontrol")} className="action-btn">
-            ⚙️ Device Control
-          </button>
-          <button onClick={() => navigate("/device-management")} className="action-btn">
-            📟 Device Management
-          </button>
-          <button onClick={() => navigate("/Account")} className="action-btn">
-            👤 Accounts
-          </button>
-          <button onClick={() => navigate("/reports")} className="action-btn">
-            📄 View Reports
-          </button>
+        <h3 className="section-title">Recent Activities</h3>
+        <div className="activities-container">
+          {recentActivities.map((activity, index) => (
+            <div key={index} className="activity-item">
+              <div className="activity-icon">{activity.icon}</div>
+              <div className="activity-details">
+                <h4>{activity.title}</h4>
+                <span className="activity-time">{activity.time}</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
+
+      <nav className="bottom-nav">
+        <button 
+          className={`nav-option ${activeTab === 'home' ? 'active' : ''}`}
+          onClick={() => handleNavigation('/doctorhome', 'home')}
+        >
+          <FaHome className="nav-icon" />
+          <span>Home</span>
+        </button>
+        <button 
+          className={`nav-option ${activeTab === 'device-management' ? 'active' : ''}`}
+          onClick={() => handleNavigation('/device-management', 'device-management')}
+        >
+          <FaMicrochip className="nav-icon" />
+          <span>Devices</span>
+        </button>
+        <button 
+          className={`nav-option ${activeTab === 'device-control' ? 'active' : ''}`}
+          onClick={() => handleNavigation('/devicecontrol', 'device-control')}
+        >
+          <FaCog className="nav-icon" />
+          <span>Control</span>
+        </button>
+        <button 
+          className={`nav-option ${activeTab === 'reports' ? 'active' : ''}`}
+          onClick={() => handleNavigation('/reports', 'reports')}
+        >
+          <FaFileAlt className="nav-icon" />
+          <span>Reports</span>
+        </button>
+      </nav>
     </div>
   );
 };
