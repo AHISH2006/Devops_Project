@@ -1,60 +1,96 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaPlusCircle, FaListAlt, FaUserMd, FaHistory, FaBars, FaMicrochip, FaBolt } from 'react-icons/fa';
-import '../styles/devicecontrol.css';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { FaArrowLeft, FaPlusCircle, FaListAlt, FaUserMd, FaHistory, FaMicrochip, FaBolt } from 'react-icons/fa';
+import '../styles/device.css';
 
 const DeviceControl = () => {
   const navigate = useNavigate();
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedDevice, setSelectedDevice] = useState(null);
-  const sidebarRef = useRef(null);
-  const menuButtonRef = useRef(null);
+  const location = useLocation();
+  const [selectedDevice, setSelectedDevice] = useState('EMG');
+  const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        isSidebarOpen &&
-        sidebarRef.current &&
-        !sidebarRef.current.contains(event.target) &&
-        !menuButtonRef.current.contains(event.target)
-      ) {
-        setSidebarOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isSidebarOpen]);
-
-  const sessionButtons = [
-    {
-      title: 'Create Session',
-      icon: <FaPlusCircle />,
-      onClick: () => navigate('/create-session', { state: { deviceType: selectedDevice }}),
-      description: `Start a new ${selectedDevice} treatment session`
-    },
-    {
-      title: 'Programs',
-      icon: <FaListAlt />,
-      path: '/programs',
-      description: 'View and manage treatment programs'
-    },
-    {
-      title: 'Patient Details',
-      icon: <FaUserMd />,
-      path: '/patient-details',
-      description: 'Access patient information'
-    },
-    {
-      title: 'Treatment History',
-      icon: <FaHistory />,
-      path: '/treatment-history',
-      description: 'View past treatment records'
+    const role = location.state?.role;
+    if (role) {
+      setUserRole(role);
     }
-  ];
+  }, [location]);
 
-  const handleDeviceClick = (device) => {
-    setSelectedDevice(device);
+  const handleBackClick = () => {
+    const currentRole = location.state?.role;
+    if (currentRole === 'doctor') {
+      navigate('/doctorhome');
+    } else if (currentRole === 'patient') {
+      navigate('/patienthome');
+    } else {
+      navigate('/doctorhome'); // Default to doctor home
+    }
+  };
+
+  const getSessionButtons = () => {
+    const commonButtons = [
+      {
+        title: 'Treatment History',
+        icon: <FaHistory />,
+        path: '/treatment-history',
+        description: 'View past treatment records'
+      }
+    ];
+
+    const emsButtons = [
+      {
+        title: 'Start Session',
+        icon: <FaPlusCircle />,
+        onClick: () => navigate('/startsession', { 
+          state: { deviceType: selectedDevice }
+        }),
+        description: 'Start a new EMS treatment session'
+      },
+      {
+        title: 'Programs',
+        icon: <FaListAlt />,
+        path: '/programs',
+        description: 'View and manage treatment programs'
+      },
+      {
+        title: 'Schedule Session',
+        icon: <FaUserMd />,
+        onClick: () => navigate('/start-session', { 
+          state: { 
+            deviceType: selectedDevice,
+            isScheduling: true
+          }
+        }),
+        description: 'Schedule a future session'
+      },
+      ...commonButtons
+    ];
+
+    const emgButtons = [
+      {
+        title: 'Start Session',
+        icon: <FaPlusCircle />,
+        onClick: () => navigate('/startsession', { 
+          state: { deviceType: selectedDevice }
+        }),
+        description: 'Start EMG monitoring session'
+      },
+      {
+        title: 'Patient Records',
+        icon: <FaUserMd />,
+        path: '/patient-details',
+        description: 'View patient EMG records'
+      },
+      {
+        title: 'Data Analysis',
+        icon: <FaListAlt />,
+        path: '/emg-analysis',
+        description: 'Analyze EMG data patterns'
+      },
+      ...commonButtons
+    ];
+
+    return selectedDevice === 'EMS' ? emsButtons : emgButtons;
   };
 
   const handleButtonClick = (button) => {
@@ -67,77 +103,56 @@ const DeviceControl = () => {
 
   return (
     <div className="device-container">
-      <nav className="device-navbar">
+      <nav className="top-navbar">
         <div className="nav-left">
-          <button className="back-btn" onClick={() => navigate("/doctorhome")}>
+          <button className="back-button" onClick={handleBackClick}>
             <FaArrowLeft /> Back
-          </button>
-          <button
-            ref={menuButtonRef}
-            className="sidebar-toggle"
-            onClick={() => setSidebarOpen(!isSidebarOpen)}
-          >
-            <FaBars />
           </button>
           <h2>Device Control Portal</h2>
         </div>
       </nav>
 
-      <div ref={sidebarRef} className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-        <div className="sidebar-header">
-          <h3>Device Control</h3>
+      <main className="main-content">
+        <div className="welcome-section">
+          <h1>{selectedDevice} Control Panel</h1>
+          <p>Select an option to manage your {selectedDevice} device</p>
         </div>
-        <div className="device-options">
-          <button
-            className={`device-option ${selectedDevice === 'EMG' ? 'active' : ''}`}
-            onClick={() => handleDeviceClick('EMG')}
-          >
-            <FaMicrochip className="option-icon" />
-            <span>EMG Devices</span>
-          </button>
-          <button
-            className={`device-option ${selectedDevice === 'EMS' ? 'active' : ''}`}
-            onClick={() => handleDeviceClick('EMS')}
-          >
-            <FaBolt className="option-icon" />
-            <span>EMS Devices</span>
-          </button>
+
+        <div className="session-options">
+          {getSessionButtons().map((button, index) => (
+            <button 
+              key={index}
+              className="session-card"
+              onClick={() => handleButtonClick(button)}
+            >
+              <div className="card-icon">
+                {button.icon}
+              </div>
+              <div className="card-content">
+                <h3>{button.title}</h3>
+                <p>{button.description}</p>
+              </div>
+            </button>
+          ))}
         </div>
-      </div>
-
-      <main className={`main-content ${isSidebarOpen ? 'shifted' : ''}`}>
-        {selectedDevice ? (
-          <>
-            <div className="welcome-section">
-              <h1>Welcome to {selectedDevice} Session Portal</h1>
-              <p>Select an option to begin your session management</p>
-            </div>
-
-            <div className="session-options">
-              {sessionButtons.map((button, index) => (
-                <button 
-                  key={index}
-                  className="session-card"
-                  onClick={() => handleButtonClick(button)}
-                >
-                  <div className="card-icon">
-                    {button.icon}
-                  </div>
-                  <div className="card-content">
-                    <h3>{button.title}</h3>
-                    <p>{button.description}</p>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </>
-        ) : (
-          <div className="welcome-message">
-            <h2>Welcome to Device Control</h2>
-            <p>Select a device type from the sidebar to begin</p>
-          </div>
-        )}
       </main>
+
+      <nav className="bottom-nav">
+        <button
+          className={`nav-option ${selectedDevice === 'EMG' ? 'active' : ''}`}
+          onClick={() => setSelectedDevice('EMG')}
+        >
+          <FaMicrochip className="nav-icon" />
+          <span>EMG</span>
+        </button>
+        <button
+          className={`nav-option ${selectedDevice === 'EMS' ? 'active' : ''}`}
+          onClick={() => setSelectedDevice('EMS')}
+        >
+          <FaBolt className="nav-icon" />
+          <span>EMS</span>
+        </button>
+      </nav>
     </div>
   );
 };
