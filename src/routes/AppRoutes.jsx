@@ -9,10 +9,10 @@ import PatientHome from "../pages/PatientHome";
 import SignupPage from "../pages/SignupPage";
 import ReportsPage from "../pages/ReportsPage";
 import DeviceControl from "../pages/DeviceControl";
-import CreateSession from "../pages/CreateSession";
-import Programs from "../pages/Programs";
 import DeviceManagement from "../pages/DeviceManagement";
-import AccountPage from "../pages/AccountPage";
+import AccountPage from "../pages/AccountPage.jsx";
+import StartSession from "../pages/StartSession";
+
 
 <pages></pages>
 
@@ -25,14 +25,14 @@ const AppRoutes = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/Account" element={<AccountPage/>} />
+        
         <Route path="/DoctorHome" element={<DoctorHome/>} />
         <Route path="/reports" element={<ReportsPage />} />
         <Route path="/devicecontrol" element={<DeviceControl />} />
-        <Route path="/programs" element={<Programs />} />
         <Route path="/PatientHome" element={<PatientHome/>} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/create-session" element={<CreateSession/>} />
+        <Route path="/startsession" element={<StartSession/>} />
         <Route path="/device-management" element={<DeviceManagement />} />
         <Route path="*" element={<h1>404 - Page Not Found</h1>} />
       </Routes>

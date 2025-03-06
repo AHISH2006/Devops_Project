@@ -1,0 +1,220 @@
+.session-container {
+    min-height: 100vh;
+    background: #ffe6e6;
+    padding-bottom: 80px;
+  }
+  
+  .session-nav {
+    background: white;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .back-button {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+  
+  .back-button:hover {
+    background: rgba(0,0,0,0.05);
+  }
+  
+  .session-content {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  /* EMG Patient Form */
+  .patient-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .form-group label {
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+  }
+  
+  .form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  .emg-visualization {
+    margin: 20px 0;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .visualization-placeholder {
+    height: 200px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+  }
+  
+  /* EMS Session Form */
+  .treatment-types {
+    margin-bottom: 30px;
+  }
+  
+  .treatment-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+  }
+  
+  .treatment-type-btn {
+    padding: 20px;
+    border: none;
+    background: #f0f0f0;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .treatment-type-btn.active {
+    background: linear-gradient(135deg, purple, rgb(239, 95, 239));
+    color: white;
+  }
+  
+  .intensity-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .intensity-btn {
+    flex: 1;
+    padding: 10px 20px;
+    border: none;
+    background: #f0f0f0;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .intensity-btn.active {
+    background: linear-gradient(135deg, purple, rgb(239, 95, 239));
+    color: white;
+  }
+  
+  /* Live Session */
+  .live-session-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .patient-info {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .session-controls {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .start-btn,
+  .end-btn,
+  .start-session-btn,
+  .patient-details-btn {
+    padding: 14px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .start-btn,
+  .start-session-btn {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+  }
+  
+  .end-btn {
+    background: linear-gradient(135deg, #f44336, #e53935);
+    color: white;
+  }
+  
+  .patient-details-btn {
+    background: linear-gradient(135deg, purple, rgb(239, 95, 239));
+    color: white;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  /* Hover Effects */
+  .treatment-type-btn:hover,
+  .intensity-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  
+  .start-btn:hover,
+  .end-btn:hover,
+  .start-session-btn:hover,
+  .patient-details-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  }
+  
+  @media (max-width: 768px) {
+    .treatment-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .session-controls {
+      flex-direction: column;
+    }
+  
+    .start-btn,
+    .end-btn {
+      width: 100%;
+    }
+  }

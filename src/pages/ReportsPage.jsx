@@ -1,40 +1,16 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaBars, FaFileAlt, FaCog, FaArrowLeft, FaFileDownload, FaGoogleDrive, FaFileUpload } from "react-icons/fa";
+import { FaArrowLeft, FaFileAlt, FaCog, FaFileDownload, FaGoogleDrive, FaFileUpload } from "react-icons/fa";
 import "../styles/reports.css";
 
 const ReportsPage = () => {
   const navigate = useNavigate();
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState(null);
-  const sidebarRef = useRef(null);
-  const menuButtonRef = useRef(null);
+  const [activeSection, setActiveSection] = useState("viewer");
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        isSidebarOpen &&
-        sidebarRef.current &&
-        !sidebarRef.current.contains(event.target) &&
-        !menuButtonRef.current.contains(event.target)
-      ) {
-        setSidebarOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isSidebarOpen]);
-
-  const sidebarOptions = [
-    { icon: <FaFileAlt />, title: "Report Viewer", id: "viewer" },
-    { icon: <FaCog />, title: "Manage Reports", id: "manage" }
+  const bottomNavOptions = [
+    { icon: <FaFileAlt />, title: "View", id: "viewer" },
+    { icon: <FaCog />, title: "Manage", id: "manage" }
   ];
-
-  const handleSidebarItemClick = (id) => {
-    setActiveSection(id);
-    setSidebarOpen(false);
-  };
 
   const renderContent = () => {
     switch (activeSection) {
@@ -50,7 +26,20 @@ const ReportsPage = () => {
                   <p>Last modified: 2 days ago</p>
                 </div>
               </div>
-              {/* Add more report items as needed */}
+              <div className="report-item">
+                <FaFileAlt className="report-icon" />
+                <div className="report-details">
+                  <h3>EMS Treatment - 01/12/2024</h3>
+                  <p>Last modified: 5 days ago</p>
+                </div>
+              </div>
+              <div className="report-item">
+                <FaFileAlt className="report-icon" />
+                <div className="report-details">
+                  <h3>Patient Progress - 01/10/2024</h3>
+                  <p>Last modified: 1 week ago</p>
+                </div>
+              </div>
             </div>
           </div>
         );
@@ -87,7 +76,7 @@ const ReportsPage = () => {
         return (
           <div className="welcome-message">
             <h2>Welcome to Reports</h2>
-            <p>Select an option from the sidebar to begin</p>
+            <p>Select an option from the bottom navigation to begin</p>
           </div>
         );
     }
@@ -100,38 +89,26 @@ const ReportsPage = () => {
           <button className="back-button" onClick={() => navigate(-1)}>
             <FaArrowLeft /> Back
           </button>
-          <button
-            ref={menuButtonRef}
-            className="menu-button"
-            onClick={() => setSidebarOpen(!isSidebarOpen)}
-          >
-            <FaBars />
-          </button>
           <h2>Reports</h2>
         </div>
       </nav>
 
-      <div ref={sidebarRef} className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-        <div className="sidebar-header">
-          <h3>Reports Menu</h3>
-        </div>
-        <div className="sidebar-options">
-          {sidebarOptions.map((option) => (
-            <button
-              key={option.id}
-              className={`sidebar-option ${activeSection === option.id ? 'active' : ''}`}
-              onClick={() => handleSidebarItemClick(option.id)}
-            >
-              {option.icon}
-              <span>{option.title}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <main className={`main-content ${isSidebarOpen ? 'shifted' : ''}`}>
+      <main className="main-content">
         {renderContent()}
       </main>
+
+      <nav className="bottom-nav">
+        {bottomNavOptions.map((option) => (
+          <button
+            key={option.id}
+            className={`nav-option ${activeSection === option.id ? 'active' : ''}`}
+            onClick={() => setActiveSection(option.id)}
+          >
+            <div className="nav-icon">{option.icon}</div>
+            <span>{option.title}</span>
+          </button>
+        ))}
+      </nav>
     </div>
   );
 };
