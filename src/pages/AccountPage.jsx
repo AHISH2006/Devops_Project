@@ -1,311 +1,260 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  FaArrowLeft, FaUser, FaFileAlt, FaComments, FaCog, 
-  FaQuestionCircle, FaSync, FaInfoCircle, FaSignOutAlt, 
-  FaCamera, FaImage, FaEnvelope, FaPhone, FaLock, FaUserEdit 
+  FaArrowLeft, FaUser, FaSignOutAlt, FaFileMedical,
+  FaShieldAlt, FaQuestionCircle, FaInfoCircle 
 } from 'react-icons/fa';
-import { BiMessageDetail } from 'react-icons/bi';
 import '../styles/home.css';
 
-const AccountPage = () => {
+export const AccountPage = () => {
   const navigate = useNavigate();
-  const [showMediaOptions, setShowMediaOptions] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [showEditProfile, setShowEditProfile] = useState(false);
-  const [profileImage, setProfileImage] = useState(null);
-  const [showHealthReport, setShowHealthReport] = useState(false);
-  const [showMessages, setShowMessages] = useState(false);
-  const [profileData, setProfileData] = useState({
-    name: 'John Doe',
-    email: 'john@example.com',
-    phone: '+1234567890',
-    password: '',
-    newPassword: '',
-    confirmPassword: ''
+  const [isEditing, setIsEditing] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
+  const [userData, setUserData] = useState({
+    name: 'Naveen',
+    email: 'gmail.com',
+    patientId: 'PT2024001',
+    phone: '+91 9876543210',
+    age: '25',
+    gender: 'Male',
+    address: '123 Main Street',
+    bloodGroup: 'O+',
+    emergencyContact: '+91 9876543211'
   });
 
   const menuItems = [
-    { 
-      icon: <FaFileAlt />, 
-      title: 'Health report', 
-      path: '/health-report',
-      content: [
-        { date: '2024-01-15', type: 'EMG Session', duration: '30 mins' },
-        { date: '2024-01-10', type: 'EMS Session', duration: '45 mins' },
-      ]
+    {
+      icon: <FaUser />,
+      title: 'Personal Information',
+      onClick: () => setActiveSection('personal')
     },
-    { 
-      icon: <BiMessageDetail />, 
-      title: 'Message', 
-      path: '/messages',
-      messages: [
-        { id: 1, from: 'Dr. Smith', text: 'Your next session is scheduled', time: '2h ago' },
-        { id: 2, from: 'System', text: 'Treatment report ready', time: '1d ago' },
-      ]
+    {
+      icon: <FaFileMedical />,
+      title: 'Reports & Documents',
+      onClick: () => navigate('/documents')
     },
-    { icon: <FaCog />, title: 'Settings', path: '/settings' },
-    { icon: <FaQuestionCircle />, title: 'Help', path: '/help' },
-    { icon: <FaComments />, title: 'Questions and Feedback', path: '/feedback' },
-    { icon: <FaSync />, title: 'Check for updates', path: '/updates' },
-    { icon: <FaInfoCircle />, title: 'About', path: '/about' },
-    { icon: <FaSignOutAlt />, title: 'Logout', path: '/login' }
+    {
+      icon: <FaShieldAlt />,
+      title: 'Privacy & Security',
+      onClick: () => navigate('/privacy')
+    },
+    {
+      icon: <FaQuestionCircle />,
+      title: 'Help & Support',
+      onClick: () => navigate('/support')
+    },
+    {
+      icon: <FaInfoCircle />,
+      title: 'App Version',
+      onClick: () => setActiveSection('version')
+    }
   ];
 
-  const handleMediaSelect = (type) => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = type === 'camera' ? 'image/*;capture=camera' : 'image/*';
-    
-    input.onchange = (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => setProfileImage(e.target.result);
-        reader.readAsDataURL(file);
-      }
-      setShowMediaOptions(false);
-    };
-    
-    input.click();
+  const handleInputChange = (e) => {
+    setUserData({
+      ...userData,
+      [e.target.name]: e.target.value
+    });
   };
 
-  const handleProfileChange = (e) => {
-    const { name, value } = e.target;
-    setProfileData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+  const handleSave = () => {
+    setIsEditing(false);
   };
 
-  const handleMenuClick = (item) => {
-    if (item.title === 'Health report') {
-      setShowHealthReport(true);
-    } else if (item.title === 'Message') {
-      setShowMessages(true);
-    } else if (item.title === 'Settings') {
-      setShowSettings(true);
-    } else {
-      navigate(item.path);
+  const renderPersonalInfo = () => {
+    if (activeSection !== 'personal') return null;
+
+    if (isEditing) {
+      return (
+        <div className="edit-form">
+          <div className="form-group">
+            <label>Name</label>
+            <input
+              type="text"
+              name="name"
+              value={userData.name}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>Email</label>
+            <input
+              type="email"
+              name="email"
+              value={userData.email}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>Phone</label>
+            <input
+              type="tel"
+              name="phone"
+              value={userData.phone}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>Age</label>
+            <input
+              type="number"
+              name="age"
+              value={userData.age}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>Gender</label>
+            <select name="gender" value={userData.gender} onChange={handleInputChange}>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Address</label>
+            <textarea
+              name="address"
+              value={userData.address}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>Blood Group</label>
+            <input
+              type="text"
+              name="bloodGroup"
+              value={userData.bloodGroup}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-group">
+            <label>Emergency Contact</label>
+            <input
+              type="tel"
+              name="emergencyContact"
+              value={userData.emergencyContact}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-actions">
+            <button className="save-btn" onClick={handleSave}>Save</button>
+            <button className="cancel-btn" onClick={() => setIsEditing(false)}>Cancel</button>
+          </div>
+        </div>
+      );
     }
+
+    return (
+      <div className="info-display">
+        <div className="info-group">
+          <h3>Basic Information</h3>
+          <div className="info-item">
+            <label>Name:</label>
+            <span>{userData.name}</span>
+          </div>
+          <div className="info-item">
+            <label>Age:</label>
+            <span>{userData.age}</span>
+          </div>
+          <div className="info-item">
+            <label>Gender:</label>
+            <span>{userData.gender}</span>
+          </div>
+          <div className="info-item">
+            <label>Blood Group:</label>
+            <span>{userData.bloodGroup}</span>
+          </div>
+        </div>
+
+        <div className="info-group">
+          <h3>Contact Information</h3>
+          <div className="info-item">
+            <label>Email:</label>
+            <span>{userData.email}</span>
+          </div>
+          <div className="info-item">
+            <label>Phone:</label>
+            <span>{userData.phone}</span>
+          </div>
+          <div className="info-item">
+            <label>Address:</label>
+            <span>{userData.address}</span>
+          </div>
+          <div className="info-item">
+            <label>Emergency Contact:</label>
+            <span>{userData.emergencyContact}</span>
+          </div>
+        </div>
+      </div>
+    );
   };
 
-  const handleSaveProfile = () => {
-    // Add API call here to save profile data
-    setShowEditProfile(false);
-  };
-
-  const handleSaveSettings = () => {
-    // Add API call here to save settings
-    setShowSettings(false);
+  const renderVersionInfo = () => {
+    if (activeSection !== 'version') return null;
+    return (
+      <div className="info-display">
+        <div className="info-group">
+          <h3>App Information</h3>
+          <div className="info-item">
+            <label>Version:</label>
+            <span>1.0.0</span>
+          </div>
+          <div className="info-item">
+            <label>Last Updated:</label>
+            <span>January 2024</span>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
-    <div className="account-page">
-      <div className="account-header">
+    <div className="account-container">
+      <nav className="account-nav">
         <button className="back-button" onClick={() => navigate(-1)}>
           <FaArrowLeft />
         </button>
-      </div>
+        <div className="nav-title">
+          <h1>{userData.name}</h1>
+          <p>Patient ID: {userData.patientId}</p>
+          <p>{userData.email}</p>
+        </div>
+        {activeSection === 'personal' && (
+          <button className="edit-button" onClick={() => setIsEditing(!isEditing)}>
+            {isEditing ? 'Cancel' : 'Edit'}
+          </button>
+        )}
+      </nav>
 
       <div className="profile-section">
-        <div className="profile-photo" onClick={() => setShowMediaOptions(true)}>
-          {profileImage ? (
-            <img src={profileImage} alt="Profile" className="profile-image" />
-          ) : (
-            <FaUser className="profile-icon" />
-          )}
-          <div className="camera-icon">
-            <FaCamera />
-          </div>
-        </div>
-        <div className="profile-info">
-          <h2>{profileData.name}</h2>
-          <button className="edit-button" onClick={() => setShowEditProfile(true)}>
-            Edit <FaUserEdit />
-          </button>
+        <div className="profile-image">
+          <FaUser className="default-avatar" />
         </div>
       </div>
-
-      {showMediaOptions && (
-        <div className="media-options-modal">
-          <div className="media-options-content">
-            <button className="back-btn" onClick={() => handleMediaSelect('camera')}>
-              <FaCamera /> Take Photo
-            </button>
-            <button className="back-btn" onClick={() => handleMediaSelect('gallery')}>
-              <FaImage /> Choose from Gallery
-            </button>
-            <button  onClick={() => setShowMediaOptions(false)} className="back-btn">
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-
-      {showEditProfile && (
-        <div className="edit-profile-modal">
-          <div className="edit-profile-content">
-            <div className="edit-profile-header">
-              <h3>Edit Profile</h3>
-              <button className="close-modal-btn" onClick={() => setShowEditProfile(false)}>×</button>
-            </div>
-            <div className="edit-form">
-              <div className="edit-form-group">
-                <label><FaUser /> Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={profileData.name}
-                  onChange={handleProfileChange}
-                  placeholder="Enter your name"
-                />
-              </div>
-              <div className="edit-form-group">
-                <label><FaEnvelope /> Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={profileData.email}
-                  onChange={handleProfileChange}
-                  placeholder="Enter your email"
-                />
-              </div>
-              <div className="edit-form-group">
-                <label><FaPhone /> Phone</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={profileData.phone}
-                  onChange={handleProfileChange}
-                  placeholder="Enter your phone number"
-                />
-              </div>
-              <div className="edit-profile-buttons">
-                <button className="save-profile-btn" onClick={handleSaveProfile}>
-                  Save Changes
-                </button>
-                <button className="cancel-profile-btn" onClick={() => setShowEditProfile(false)}>
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showSettings && (
-        <div className="settings-modal">
-          <div className="settings-content">
-            <div className="settings-header">
-              <h3>Settings</h3>
-              <button className="close-modal-btn" onClick={() => setShowSettings(false)}>×</button>
-            </div>
-            <div className="settings-form">
-              <div className="settings-group">
-                <label><FaLock /> Change Password</label>
-                <div className="input-group">
-                  <input
-                    type="password"
-                    name="password"
-                    value={profileData.password}
-                    onChange={handleProfileChange}
-                    placeholder="Current Password"
-                  />
-                </div>
-                <div className="input-group">
-                  <input
-                    type="password"
-                    name="newPassword"
-                    value={profileData.newPassword}
-                    onChange={handleProfileChange}
-                    placeholder="New Password"
-                  />
-                </div>
-                <div className="input-group">
-                  <input
-                    type="password"
-                    name="confirmPassword"
-                    value={profileData.confirmPassword}
-                    onChange={handleProfileChange}
-                    placeholder="Confirm New Password"
-                  />
-                </div>
-              </div>
-              <div className="settings-actions">
-                <button className="save-settings-btn" onClick={handleSaveSettings}>
-                  Save Changes
-                </button>
-                <button className="cancel-settings-btn" onClick={() => setShowSettings(false)}>
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showHealthReport && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>Previous Sessions</h3>
-            <div className="sessions-list">
-              {menuItems[0].content.map((session, index) => (
-                <div key={index} className="session-item">
-                  <div className="session-date">{session.date}</div>
-                  <div className="session-info">
-                    <div>{session.type}</div>
-                    <div>{session.duration}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <button onClick={() => setShowHealthReport(false)} className="close-btn">
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-
-      {showMessages && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>Messages</h3>
-            <div className="messages-list">
-              {menuItems[1].messages.map((message) => (
-                <div key={message.id} className="message-item">
-                  <div className="message-header">
-                    <strong>{message.from}</strong>
-                    <span>{message.time}</span>
-                  </div>
-                  <div className="message-text">{message.text}</div>
-                </div>
-              ))}
-            </div>
-            <button onClick={() => setShowMessages(false)} className="close-btn">
-              Close
-            </button>
-          </div>
-        </div>
-      )}
 
       <div className="menu-section">
         {menuItems.map((item, index) => (
-          <React.Fragment key={index}>
-            {(index === 2 || index === 5) && <div className="menu-divider"></div>}
-            <button 
-              className="menu-item" 
-              onClick={() => handleMenuClick(item)}
-            >
-              <div className="menu-item-left">
-                <span className="menu-icon">{item.icon}</span>
-                <span className="menu-title">{item.title}</span>
-              </div>
-              <FaArrowLeft className="arrow-icon" />
-            </button>
-          </React.Fragment>
+          <button 
+            key={index} 
+            className={`menu-item ${activeSection === 'personal' && item.title === 'Personal Information' ? 'active' : ''}`}
+            onClick={item.onClick}
+          >
+            <div className="menu-item-left">
+              <span className="menu-icon">{item.icon}</span>
+              <span className="menu-title">{item.title}</span>
+            </div>
+          </button>
         ))}
       </div>
+
+      {renderPersonalInfo()}
+      {renderVersionInfo()}
+
+      <button className="logout-button" onClick={() => navigate('/login')}>
+        <FaSignOutAlt />
+        <span>Log out</span>
+      </button>
     </div>
   );
 };
