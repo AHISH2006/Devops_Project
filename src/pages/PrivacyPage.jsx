@@ -35,6 +35,7 @@ export const PrivacySecurityPage = () => {
         </button>
         <h1>Privacy and Security</h1>
       </div>
+      
 
       <div className="privacy-section">
         <h2>Security</h2>

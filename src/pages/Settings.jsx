@@ -51,7 +51,7 @@ export const SettingsPage = () => {
         <div className="settings-item">
           <div className="item-left">
             <FaDesktop className="icon" />
-            <span>Treatment Programs</span>
+            <span>Treatment Program</span>
           </div>
           <FaArrowLeft className="arrow-icon" />
         </div>
