@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   FaArrowLeft, FaUser, FaSignOutAlt, FaFileMedical,
-  FaShieldAlt, FaQuestionCircle, FaInfoCircle 
+  FaShieldAlt, FaQuestionCircle, FaInfoCircle, 
+  FaCog
 } from 'react-icons/fa';
 import '../styles/home.css';
 
@@ -29,8 +30,8 @@ export const AccountPage = () => {
       onClick: () => setActiveSection('personal')
     },
     {
-      icon: <FaFileMedical />,
-      title: 'Reports & Documents',
+      icon: <FaCog />,
+      title: 'Settings',
       onClick: () => navigate('/documents')
     },
     {
