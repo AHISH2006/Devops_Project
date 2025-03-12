@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaArrowLeft, FaPlusCircle, FaListAlt, FaUserMd, FaHistory, FaMicrochip, FaBolt } from 'react-icons/fa';
+import { FaArrowLeft, FaPlusCircle, FaCog,FaFileAlt,FaListAlt, FaUserMd, FaHistory, FaMicrochip, FaBolt ,FaPlayCircle} from 'react-icons/fa';
 import '../styles/device.css';
 
-const DeviceControl = () => {
+const DeviceControls = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedDevice, setSelectedDevice] = useState('EMG');
@@ -39,37 +39,50 @@ const DeviceControl = () => {
 
     const emsButtons = [
       {
-        title: 'Start Session',
-        icon: <FaPlusCircle />,
+        title: 'Add Patient',
+        icon: <FaPlusCircle/>,
         onClick: () => navigate('/startsession', { 
           state: { deviceType: selectedDevice }
         }),
         description: 'Start a new EMS treatment session'
       },
-
-
+ 
+      {
+        title: 'Start Session',
+        icon: <FaUserMd />,
+        onClick: () => navigate('/start-session', { 
+          state: { 
+            deviceType: selectedDevice,
+            isScheduling: true
+          }
+        }),
+        description: 'Schedule a future session'
+      },
       ...commonButtons
     ];
 
     const emgButtons = [
       {
-        title: 'Start Session',
+        title: 'Add Patient',
         icon: <FaPlusCircle />,
-        path:'/startsession',
+        onClick: () => navigate('/startsession', { 
+          state: { deviceType: selectedDevice }
+        }),
+        description: 'Adding Patients to the system'
+      },
+      {
+        title: 'Start Session',
+        icon: <FaPlayCircle />,
+        path: '/patient-details',
         description: 'Start EMG monitoring session'
       },
       {
         title: 'My Records',
-        icon: <FaUserMd />,
-        path: '/patient-details',
+        icon: <FaFileAlt />,
+        path: '/emg-analysis',
         description: 'View patient EMG records'
       },
-      {
-        title: 'Data Analysis',
-        icon: <FaListAlt />,
-        path: '/emg-analysis',
-        description: 'Analyze EMG data patterns'
-      },
+
       ...commonButtons
     ];
 
@@ -88,7 +101,7 @@ const DeviceControl = () => {
     <div className="device-container">
       <nav className="top-navbar">
         <div className="nav-left">
-          <button className="back-button" onClick={()=>navigate("/PatientHome")}>
+          <button className="back-button" onClick={()=>navigate("/doctorhome")}>
             <FaArrowLeft /> Back
           </button>
           <h2>Device Control Portal</h2>
@@ -140,4 +153,4 @@ const DeviceControl = () => {
   );
 };
 
-export default DeviceControl;
+export default DeviceControls;

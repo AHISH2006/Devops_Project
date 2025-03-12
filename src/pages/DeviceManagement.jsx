@@ -13,6 +13,7 @@ const DeviceManagement = () => {
   const [showManualEntry, setShowManualEntry] = useState(false);
   const [showQRScanner, setShowQRScanner] = useState(false);
   const [scanResult, setScanResult] = useState(null);
+  const [facingMode, setFacingMode] = useState('user');
   const [deviceForm, setDeviceForm] = useState({
     name: '',
     type: '',
@@ -55,7 +56,7 @@ const DeviceManagement = () => {
       const style = document.createElement('style');
       style.textContent = `
         #reader video {
-          transform: scaleX(-1);
+          transform: ${facingMode === 'user' ? 'scaleX(-1)' : 'none'};
         }
       `;
       document.head.appendChild(style);
@@ -85,7 +86,10 @@ const DeviceManagement = () => {
         }
       };
     }
-  }, [showQRScanner]);
+  }, [showQRScanner,facingMode]);
+  const switchCamera = () => {
+    setFacingMode(prevMode => prevMode === 'user' ? 'environment' : 'user');
+  };
 
   const handleAddDeviceClick = () => {
     setShowAddDevice(true);

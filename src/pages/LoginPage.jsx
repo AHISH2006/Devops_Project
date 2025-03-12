@@ -12,8 +12,10 @@ const LoginPage = () => {
 
   const handleLogin = () => {
     if (username === "doctor") {
+      localStorage.setItem('userRole', 'doctor');
       navigate("/DoctorHome");
     } else if (username === "patient") {
+      localStorage.setItem('userRole', 'patient');
       navigate("/PatientHome");
     } else {
       alert("Invalid username or role. Use 'doctor' or 'patient'.");

@@ -70,8 +70,8 @@ const PatientHome = () => {
           <span>Devices</span>
         </button>
         <button 
-          className={`nav-option ${activeTab === 'device-control' ? 'active' : ''}`}
-          onClick={() => handleNavigation('/devicecontrol', 'device-control')}
+          className={`nav-option `}
+          onClick={() => navigate("/padevice")}
         >
           <FaCog className="nav-icon" />
           <span>Control</span>

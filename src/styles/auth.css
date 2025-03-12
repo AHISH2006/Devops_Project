@@ -9,7 +9,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 80vh;
+    height: 65vh;
     
   }
   
@@ -24,6 +24,7 @@ body {
     border-radius: 10px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     width: 300px;
+    height: 65vh;
     
   }
   
@@ -142,7 +143,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 50vh;
     background-color: #f4f4f4;
   }
   
@@ -201,7 +202,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 68vh;
   background-color: #f4f4f4;
 }
 

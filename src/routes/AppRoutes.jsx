@@ -8,15 +8,14 @@ import DoctorHome from "../pages/DoctorHome";
 import PatientHome from "../pages/PatientHome";
 import SignupPage from "../pages/SignupPage";
 import ReportsPage from "../pages/ReportsPage";
-import DeviceControl from "../pages/DeviceControl";
 import DeviceManagement from "../pages/DeviceManagement";
 import AccountPage from "../pages/AccountPage.jsx";
 import StartSession from "../pages/StartSession";
 import PrivacyPage from "../pages/PrivacyPage.jsx";
 import SettingsPage from "../pages/Settings.jsx";
 import PersonalInformation from "../pages/PersonalInformation.jsx";
-
-
+import DeviceControls from "../pages/DeviceControls.jsx";
+import DeviceControl from "../pages/DeviceControl.jsx";
 <pages></pages>
 
 
@@ -32,13 +31,14 @@ const AppRoutes = () => {
         <Route path="/privacy" element={<PrivacyPage/>} />
         <Route path="/DoctorHome" element={<DoctorHome/>} />
         <Route path="/reports" element={<ReportsPage />} />
-        <Route path="/devicecontrol" element={<DeviceControl />} />
         <Route path="/PatientHome" element={<PatientHome/>} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/startsession" element={<StartSession/>} />
         <Route path="/device-management" element={<DeviceManagement />} />
         <Route path="/personal" element={<PersonalInformation />} />
+        <Route path="/padevice" element={<DeviceControl />} />
+        <Route path="/dadevice" element={<DeviceControls/>} />
         <Route path="*" element={<h1>404 - Page Not Found</h1>} />
       </Routes>
     </Router>
