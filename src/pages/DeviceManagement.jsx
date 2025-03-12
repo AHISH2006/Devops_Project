@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaArrowLeft, FaMicrochip, FaBolt, FaQrcode, FaPen, FaPlus } from 'react-icons/fa';
-import { Html5QrcodeScanner } from 'html5-qrcode';
+import { FaArrowLeft,FaCamera, FaMicrochip, FaBolt, FaQrcode, FaPen, FaPlus } from 'react-icons/fa';
+import { Html5Qrcode } from 'html5-qrcode';
 import '../styles/device.css';
 
 const DeviceManagement = () => {
@@ -39,58 +39,56 @@ const DeviceManagement = () => {
     }
   };
 
+  
   useEffect(() => {
+    let html5QrCode;
+    
     if (showQRScanner) {
-      const scanner = new Html5QrcodeScanner('reader', {
-        qrbox: {
-          width: 250,
-          height: 250,
+      html5QrCode = new Html5Qrcode("reader");
+      
+      const config = {
+        fps: 10,
+        qrbox: { width: 250, height: 250 },
+        aspectRatio: 1
+      };
+  
+      html5QrCode.start(
+        { facingMode: facingMode },
+        config,
+        (decodedText) => {
+          // Success callback
+          html5QrCode.stop();
+          setScanResult(decodedText);
+          setShowQRScanner(false);
+          setDeviceForm(prevForm => ({
+            ...prevForm,
+            serialNumber: decodedText
+          }));
+          setShowManualEntry(true);
         },
-        fps: 5,
-        videoConstraints: {
-          facingMode: "user",
-          aspectRatio: 1
+        (error) => {
+          // Error callback
+          console.log("QR Code scanning error:", error);
         }
+      ).catch((err) => {
+        console.error("Error starting scanner:", err);
       });
-
-      const style = document.createElement('style');
-      style.textContent = `
-        #reader video {
-          transform: ${facingMode === 'user' ? 'scaleX(-1)' : 'none'};
-        }
-      `;
-      document.head.appendChild(style);
-
-      scanner.render(success, error);
-
-      function success(result) {
-        scanner.clear();
-        setScanResult(result);
-        setShowQRScanner(false);
-        setDeviceForm(prevForm => ({
-          ...prevForm,
-          serialNumber: result
-        }));
-        setShowManualEntry(true);
-        document.head.removeChild(style);
-      }
-
-      function error(err) {
-        console.error('QR Scan Error:', err);
-      }
-
+  
       return () => {
-        scanner.clear();
-        if (document.head.contains(style)) {
-          document.head.removeChild(style);
+        if (html5QrCode && html5QrCode.isScanning) {
+          html5QrCode.stop().catch(err => console.error("Error stopping scanner:", err));
         }
       };
     }
-  }, [showQRScanner,facingMode]);
-  const switchCamera = () => {
-    setFacingMode(prevMode => prevMode === 'user' ? 'environment' : 'user');
-  };
+  }, [showQRScanner, facingMode]);
 
+  const switchCamera = () => {
+    if (facingMode === 'user') {
+      setFacingMode('environment');
+    } else {
+      setFacingMode('user');
+    }
+  };
   const handleAddDeviceClick = () => {
     setShowAddDevice(true);
   };
@@ -207,8 +205,29 @@ const DeviceManagement = () => {
             <FaArrowLeft />
           </button>
           <h2>Scan QR Code</h2>
+          <button 
+            className="camera-switch-btn"
+            onClick={switchCamera}
+            style={{
+              padding: '8px',
+              marginLeft: 'auto',
+              background: 'none',
+              border: 'none',
+              color: '#333',
+              cursor: 'pointer'
+            }}
+          >
+            <FaCamera /> Switch Camera
+          </button>
         </div>
-        <div id="reader"></div>
+        <div 
+          id="reader" 
+          style={{
+            width: '100%',
+            maxWidth: '600px',
+            margin: '0 auto'
+          }}
+        ></div>
         {scanResult && (
           <div className="scan-result">
             <p>Success! QR Code Scanned:</p>
@@ -218,7 +237,6 @@ const DeviceManagement = () => {
       </div>
     </div>
   );
-
   return (
     <div className="device-container">
       <nav className="top-navbar">
