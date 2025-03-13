@@ -59,7 +59,7 @@ const DeviceControl = () => {
         description: 'Start EMG monitoring session'
       },
       {
-        title: 'My Records',
+        title: 'My  Records',
         icon: <FaUserMd />,
         path: '/patient-details',
         description: 'View patient EMG records'
