@@ -23,7 +23,7 @@ export const AccountPage = () => {
       try {
         // Replace this with actual API call
         const mockUserData = {
-          name: 'Naveen',
+          name: 'AK',
           patientId: 'PT2024001',
           email: 'gmail.com'
         };
