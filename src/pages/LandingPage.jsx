@@ -10,7 +10,7 @@ const LandingPage = () => {
     <div className="container">
       <img src={logo} alt="Essencecore Logo" className="logo" />
       <button className="btn" onClick={() => navigate("/login")}>
-        Get Started
+       Get Started
       </button>
     </div>
   );
