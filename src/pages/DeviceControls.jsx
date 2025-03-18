@@ -44,7 +44,7 @@ const DeviceControls = () => {
         onClick: () => navigate('/startsession', { 
           state: { deviceType: selectedDevice }
         }),
-        description: 'Start a new EMS treatment session'
+       
       },
  
       {
@@ -56,7 +56,7 @@ const DeviceControls = () => {
             isScheduling: true
           }
         }),
-        description: 'Schedule a future session'
+        
       },
       ...commonButtons
     ];
@@ -111,7 +111,7 @@ const DeviceControls = () => {
       <main className="main-content">
         <div className="welcome-section">
           <h1>{selectedDevice} Control Panel</h1>
-          <p>Select an option to manage your {selectedDevice} device</p>
+          <p className='pa'>Select an option to manage your {selectedDevice} device</p>
         </div>
 
         <div className="session-options">

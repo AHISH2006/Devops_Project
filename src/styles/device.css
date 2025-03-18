@@ -51,7 +51,9 @@
 .back-button:active {
   transform: scale(0.95);
 }
-
+.pa{
+  color: white;
+}
 /* Bottom Navigation */
 .bottom-nav {
   position: fixed;
