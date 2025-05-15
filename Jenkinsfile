@@ -9,7 +9,9 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/AkashEssencecore/physio.git'
+                git branch: 'main',
+                git credentialsId: 'github-credentials',
+                    url: 'https://github.com/AkashEssencecore/physio.git'
             }
         }
 
