@@ -1,31 +1,39 @@
-# Stage 1 – Build the React app
-FROM node:22 AS builder
+# ─────────────────────────────────────────────────────────────
+#  Stage 1 — Build the React app with Vite
+# ─────────────────────────────────────────────────────────────
+FROM node:22-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy dependency files and install
+# Cache npm install layer
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the app and build
+# Copy source and build
 COPY . .
-RUN npm run build   # This creates the /app/build folder by default in React
+RUN npm run build
+# Vite outputs to /app/dist (NOT /app/build)
 
-# Stage 2 – Serve using NGINX
+# ─────────────────────────────────────────────────────────────
+#  Stage 2 — Serve with NGINX Alpine (~20MB final image)
+# ─────────────────────────────────────────────────────────────
 FROM nginx:alpine
 
-# Remove default nginx static assets
+# Remove default NGINX static assets
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copy built files from previous stage
-COPY --from=builder /app/build /usr/share/nginx/html
+# Copy Vite production build from Stage 1
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# (Optional) Copy custom nginx config (if needed)
-# COPY nginx.conf /etc/nginx/nginx.conf
+# Copy custom NGINX config for SPA routing (React Router support)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80 (since NGINX listens on port 80)
+# Health check
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+  CMD wget -qO- http://localhost/ || exit 1
+
+# Expose HTTP port
 EXPOSE 80
 
-# Start NGINX
+# Start NGINX in foreground
 CMD ["nginx", "-g", "daemon off;"]
