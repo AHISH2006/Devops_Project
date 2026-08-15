@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaArrowLeft,FaCamera, FaMicrochip, FaBolt, FaQrcode, FaPen, FaPlus } from 'react-icons/fa';
+<<<<<<< HEAD
 import { Html5Qrcode } from 'html5-qrcode';
+=======
+>>>>>>> bf55af404b7a7e2901306f7994de85321248f35c
 import '../styles/device.css';
 
 const DeviceManagement = () => {
@@ -40,6 +43,7 @@ const DeviceManagement = () => {
   };
 
   
+<<<<<<< HEAD
   useEffect(() => {
     let html5QrCode;
     
@@ -81,6 +85,14 @@ const DeviceManagement = () => {
       };
     }
   }, [showQRScanner, facingMode]);
+=======
+  // QR Scanner placeholder — install html5-qrcode package to enable
+  const handleQRScannerStart = () => {
+    alert('QR Scanner coming soon! Run: npm install html5-qrcode');
+    setShowQRScanner(false);
+    setShowAddDevice(false);
+  };
+>>>>>>> bf55af404b7a7e2901306f7994de85321248f35c
 
   const switchCamera = () => {
     if (facingMode === 'user') {
@@ -99,8 +111,12 @@ const DeviceManagement = () => {
   };
 
   const handleQRScanner = () => {
+<<<<<<< HEAD
     setShowQRScanner(true);
     setShowAddDevice(false);
+=======
+    handleQRScannerStart();
+>>>>>>> bf55af404b7a7e2901306f7994de85321248f35c
   };
 
   const handleFormSubmit = (e) => {
