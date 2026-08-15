@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../styles/doctorHome.css";
-import { FaBell, FaTimes, FaSignOutAlt } from "react-icons/fa";
+import { FaBell, FaSignOutAlt } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
@@ -11,9 +11,9 @@ const PatientHome = () => {
   const menuButtonRef = useRef(null);
 
   const recentActivities = [
-    { icon: "🆕", title: "New Appointment", time: "2 mins ago" },
-    { icon: "📡", title: "Device Status Update", time: "1 hour ago" },
-    { icon: "📜", title: "Report Generated", time: "3 hours ago" }
+    { icon: "✅", title: "Build #47 Succeeded", time: "5 mins ago" },
+    { icon: "🚀", title: "Deployed to Staging", time: "2 hours ago" },
+    { icon: "📋", title: "Report Available", time: "1 day ago" }
   ];
 
   useEffect(() => {
@@ -39,14 +39,14 @@ const PatientHome = () => {
   return (
     <div className="doctor-home">
       <div className="top-nav">
-        <button 
+        <button
           ref={menuButtonRef}
           className="menu-icon-btn"
           onClick={() => setSidebarOpen(!isSidebarOpen)}
         >
           <FiMenu />
         </button>
-        <h2>Welcome</h2>
+        <h2>User Dashboard</h2>
         <FaBell className="notification-icon" />
       </div>
 
@@ -71,37 +71,42 @@ const PatientHome = () => {
       </div>
 
       <div className={`main-content ${isSidebarOpen ? 'shifted' : ''}`}>
-        <p className="greeting">Have a great day ahead</p>
+        <p className="greeting">Have a great day ahead 👋</p>
 
         <div className="stats-container">
-          <div className="stat-box">⌚️ Hours Active</div>
-          <button 
-            onClick={() => navigate("/device-management", { state: { from: '/patienthome' } })} 
+          <button
+            onClick={() => navigate("/pipeline")}
             className="stat-box"
           >
-            🌐 Active Devices
+            🔁 Pipeline Status
+          </button>
+          <button
+            onClick={() => navigate("/environments")}
+            className="stat-box"
+          >
+            🌐 System Health
           </button>
         </div>
 
         <h3 className="section-title">Quick Actions</h3>
         <div className="quick-actions">
-          <button 
-            onClick={() => navigate("/device-management", { state: { from: '/patienthome' } })} 
+          <button
+            onClick={() => navigate("/pipeline")}
             className="action-btn"
           >
-            📟 Devices Management
+            🔁 View Pipelines
           </button>
-          <button 
-            onClick={() => navigate("/Account", { state: { from: '/patienthome' } })} 
+          <button
+            onClick={() => navigate("/Account")}
             className="action-btn"
           >
             👤 Account
           </button>
-          <button 
-            onClick={() => navigate("/reports")} 
+          <button
+            onClick={() => navigate("/reports")}
             className="action-btn"
           >
-            📄 View Reports
+            📋 View Reports
           </button>
         </div>
       </div>

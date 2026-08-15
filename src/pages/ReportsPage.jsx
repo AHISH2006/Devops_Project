@@ -1,7 +1,21 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaBars, FaFileAlt, FaCog, FaArrowLeft, FaFileDownload, FaGoogleDrive, FaFileUpload } from "react-icons/fa";
+import { FaBars, FaFileAlt, FaCog, FaArrowLeft, FaFileDownload, FaCheckCircle, FaTimesCircle, FaClock } from "react-icons/fa";
 import "../styles/reports.css";
+
+const deploymentReports = [
+  { id: 1, build: '#52', branch: 'main', status: 'success', env: 'Production', triggeredBy: 'Admin', duration: '3m 12s', timestamp: '2026-08-15 14:30' },
+  { id: 2, build: '#51', branch: 'feature/auth', status: 'failed', env: 'Staging', triggeredBy: 'Admin', duration: '1m 45s', timestamp: '2026-08-15 12:10' },
+  { id: 3, build: '#50', branch: 'main', status: 'success', env: 'Staging', triggeredBy: 'Admin', duration: '2m 58s', timestamp: '2026-08-14 18:00' },
+  { id: 4, build: '#49', branch: 'hotfix/login', status: 'success', env: 'Production', triggeredBy: 'Admin', duration: '3m 05s', timestamp: '2026-08-14 10:45' },
+  { id: 5, build: '#48', branch: 'develop', status: 'failed', env: 'Development', triggeredBy: 'Admin', duration: '0m 52s', timestamp: '2026-08-13 09:20' },
+];
+
+const statusIcon = (status) => {
+  if (status === 'success') return <FaCheckCircle style={{ color: '#22c55e' }} />;
+  if (status === 'failed') return <FaTimesCircle style={{ color: '#ef4444' }} />;
+  return <FaClock style={{ color: '#f59e0b' }} />;
+};
 
 const ReportsPage = () => {
   const navigate = useNavigate();
@@ -21,13 +35,12 @@ const ReportsPage = () => {
         setSidebarOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isSidebarOpen]);
 
   const sidebarOptions = [
-    { icon: <FaFileAlt />, title: "Report Viewer", id: "viewer" },
+    { icon: <FaFileAlt />, title: "Deployment Reports", id: "deployments" },
     { icon: <FaCog />, title: "Manage Reports", id: "manage" }
   ];
 
@@ -38,19 +51,28 @@ const ReportsPage = () => {
 
   const renderContent = () => {
     switch (activeSection) {
-      case "viewer":
+      case "deployments":
         return (
           <div className="reports-content">
-            <h2>Saved Reports</h2>
+            <h2>Deployment History</h2>
             <div className="reports-list">
-              <div className="report-item">
-                <FaFileAlt className="report-icon" />
-                <div className="report-details">
-                  <h3>EMG Report - 01/15/2024</h3>
-                  <p>Last modified: 2 days ago</p>
+              {deploymentReports.map((report) => (
+                <div key={report.id} className="report-item">
+                  <span className="report-icon">{statusIcon(report.status)}</span>
+                  <div className="report-details">
+                    <h3>Build {report.build} — {report.branch}</h3>
+                    <p>
+                      <strong>{report.env}</strong> &nbsp;|&nbsp;
+                      ⏱ {report.duration} &nbsp;|&nbsp;
+                      👤 {report.triggeredBy} &nbsp;|&nbsp;
+                      🕐 {report.timestamp}
+                    </p>
+                    <span className={`status-badge status-${report.status}`}>
+                      {report.status.toUpperCase()}
+                    </span>
+                  </div>
                 </div>
-              </div>
-              {/* Add more report items as needed */}
+              ))}
             </div>
           </div>
         );
@@ -60,24 +82,24 @@ const ReportsPage = () => {
             <h2>Manage Reports</h2>
             <div className="manage-options">
               <div className="manage-option">
-                <h3>Export to ZIP</h3>
-                <p>Export reports to ZIP archive as backup or to transfer to other devices</p>
+                <h3>Export to CSV</h3>
+                <p>Download all deployment reports as a CSV file for analysis</p>
                 <button className="action-button">
-                  <FaFileDownload /> Export
+                  <FaFileDownload /> Export CSV
                 </button>
               </div>
               <div className="manage-option">
-                <h3>Save to Google Drive</h3>
-                <p>Save reports to cloud storage to backup or to view on other devices.</p>
+                <h3>Archive Old Reports</h3>
+                <p>Archive deployment reports older than 30 days to keep the dashboard clean</p>
                 <button className="action-button">
-                  <FaGoogleDrive /> Save
+                  <FaCog /> Archive
                 </button>
               </div>
               <div className="manage-option">
-                <h3>Import from Google Drive</h3>
-                <p>Import reports from cloud storage and save them to your device</p>
+                <h3>Clear Failed Builds</h3>
+                <p>Remove all failed build records from the reports log</p>
                 <button className="action-button">
-                  <FaFileUpload /> Import
+                  <FaTimesCircle /> Clear Failed
                 </button>
               </div>
             </div>
@@ -86,8 +108,8 @@ const ReportsPage = () => {
       default:
         return (
           <div className="welcome-message">
-            <h2>Welcome to Reports</h2>
-            <p>Select an option from the sidebar to begin</p>
+            <h2>Deployment Reports</h2>
+            <p>Select an option from the sidebar to view deployment history or manage reports</p>
           </div>
         );
     }
@@ -107,7 +129,7 @@ const ReportsPage = () => {
           >
             <FaBars />
           </button>
-          <h2>Reports</h2>
+          <h2>Deployment Reports</h2>
         </div>
       </nav>
 

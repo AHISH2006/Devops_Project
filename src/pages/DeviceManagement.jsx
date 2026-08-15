@@ -1,25 +1,36 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { FaBars, FaMicrochip, FaBolt, FaCog, FaCheckCircle, FaArrowLeft, FaQrcode, FaPen } from 'react-icons/fa';
+import { FaBars, FaServer, FaDatabase, FaCog, FaCheckCircle, FaArrowLeft, FaPen, FaQrcode } from 'react-icons/fa';
 import '../styles/device.css';
 
 const DeviceManagement = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedDevice, setSelectedDevice] = useState(null);
-  const [showDeviceOptions, setShowDeviceOptions] = useState({ EMG: false, EMS: false });
-  const [showAddDevice, setShowAddDevice] = useState(false);
+  const [selectedType, setSelectedType] = useState(null);
+  const [showTypeOptions, setShowTypeOptions] = useState({ AppServer: false, DBServer: false });
+  const [showAddServer, setShowAddServer] = useState(false);
   const [showManualEntry, setShowManualEntry] = useState(false);
-  const [deviceForm, setDeviceForm] = useState({
+  const [serverForm, setServerForm] = useState({
     name: '',
     type: '',
-    serialNumber: '',
-    photo: null
+    ipAddress: '',
+    environment: 'production'
   });
   const sidebarRef = useRef(null);
   const menuButtonRef = useRef(null);
-  const modalRef = useRef(null);
+
+  const servers = {
+    AppServer: [
+      { id: 1, name: 'App Server #1', status: 'Running', uptime: '99.8%', lastCheck: '1 min ago', env: 'Production' },
+      { id: 2, name: 'App Server #2', status: 'Running', uptime: '99.5%', lastCheck: '1 min ago', env: 'Staging' },
+      { id: 3, name: 'App Server #3', status: 'Stopped', uptime: '95.1%', lastCheck: '10 min ago', env: 'Development' },
+    ],
+    DBServer: [
+      { id: 1, name: 'MongoDB Primary', status: 'Running', uptime: '99.9%', lastCheck: '1 min ago', env: 'Production' },
+      { id: 2, name: 'MongoDB Replica', status: 'Running', uptime: '99.7%', lastCheck: '2 min ago', env: 'Production' },
+    ]
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -32,60 +43,37 @@ const DeviceManagement = () => {
         setSidebarOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isSidebarOpen]);
 
   const handleBackClick = () => {
-    const previousPath = location.state?.from || '/doctorhome';
+    const previousPath = location.state?.from || '/DoctorHome';
     navigate(previousPath);
   };
 
-  const handleDeviceClick = (device) => {
-    setSelectedDevice(device);
-    setShowDeviceOptions(prev => ({
-      ...prev,
-      [device]: !prev[device]
-    }));
-  };
-
-  const handleAddDeviceClick = () => {
-    setShowAddDevice(true);
-  };
-
-  const handleManualEntry = () => {
-    setShowManualEntry(true);
-    setShowAddDevice(false);
-  };
-
-  const handleQRScanner = () => {
-    navigate('/qr-scanner');
+  const handleTypeClick = (type) => {
+    setSelectedType(type);
+    setShowTypeOptions(prev => ({ ...prev, [type]: !prev[type] }));
   };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    // Add your form submission logic here
-    console.log('Device Form:', deviceForm);
+    console.log('Server Form:', serverForm);
     setShowManualEntry(false);
-    setDeviceForm({
-      name: '',
-      type: '',
-      serialNumber: '',
-      photo: null
-    });
+    setServerForm({ name: '', type: '', ipAddress: '', environment: 'production' });
   };
 
-  const renderAddDeviceModal = () => (
-    <div className="modal-overlay" onClick={() => setShowAddDevice(false)}>
+  const renderAddServerModal = () => (
+    <div className="modal-overlay" onClick={() => setShowAddServer(false)}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
-        <h2>Add New Device</h2>
+        <h2>Add New Server</h2>
         <div className="add-device-options">
-          <button className="option-btn" onClick={handleManualEntry}>
+          <button className="option-btn" onClick={() => { setShowManualEntry(true); setShowAddServer(false); }}>
             <FaPen />
             <span>Manual Entry</span>
           </button>
-          <button className="option-btn" onClick={handleQRScanner}>
+          <button className="option-btn" onClick={() => navigate('/qr-scanner')}>
             <FaQrcode />
             <span>Scan QR Code</span>
           </button>
@@ -101,53 +89,54 @@ const DeviceManagement = () => {
           <button className="back-button" onClick={() => setShowManualEntry(false)}>
             <FaArrowLeft />
           </button>
-          <h2>Add Device</h2>
+          <h2>Add Server</h2>
         </div>
         <form onSubmit={handleFormSubmit}>
           <div className="form-group">
-            <label>Device Name</label>
+            <label>Server Name</label>
             <input
               type="text"
-              value={deviceForm.name}
-              onChange={(e) => setDeviceForm({...deviceForm, name: e.target.value})}
-              placeholder="Enter device name"
+              value={serverForm.name}
+              onChange={(e) => setServerForm({ ...serverForm, name: e.target.value })}
+              placeholder="e.g. App Server #4"
               required
             />
           </div>
           <div className="form-group">
-            <label>Device Type</label>
+            <label>Server Type</label>
             <input
               type="text"
-              value={deviceForm.type}
-              onChange={(e) => setDeviceForm({...deviceForm, type: e.target.value})}
-              placeholder="Enter device type"
+              value={serverForm.type}
+              onChange={(e) => setServerForm({ ...serverForm, type: e.target.value })}
+              placeholder="e.g. Application / Database / Cache"
               required
             />
           </div>
           <div className="form-group">
-            <label>Serial Number</label>
+            <label>IP Address</label>
             <input
               type="text"
-              value={deviceForm.serialNumber}
-              onChange={(e) => setDeviceForm({...deviceForm, serialNumber: e.target.value})}
-              placeholder="Enter serial number"
+              value={serverForm.ipAddress}
+              onChange={(e) => setServerForm({ ...serverForm, ipAddress: e.target.value })}
+              placeholder="e.g. 192.168.1.10"
               required
             />
           </div>
           <div className="form-group">
-            <label>Device Photo</label>
-            <div className="photo-upload-box">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => setDeviceForm({...deviceForm, photo: e.target.files[0]})}
-              />
-            </div>
+            <label>Environment</label>
+            <select
+              value={serverForm.environment}
+              onChange={(e) => setServerForm({ ...serverForm, environment: e.target.value })}
+            >
+              <option value="production">Production</option>
+              <option value="staging">Staging</option>
+              <option value="development">Development</option>
+            </select>
           </div>
           <p className="form-note">
-            Please ensure all device information is accurate. This helps in tracking maintenance and property claims.
+            Ensure server IP and credentials are configured in your inventory before adding.
           </p>
-          <button type="submit" className="submit-btn">Add Device</button>
+          <button type="submit" className="submit-btn">Add Server</button>
         </form>
       </div>
     </div>
@@ -167,7 +156,7 @@ const DeviceManagement = () => {
           >
             <FaBars />
           </button>
-          <h2>Device Management Portal</h2>
+          <h2>Server Management</h2>
         </div>
         <div className="nav-actions">
           <button className="help-btn">Need Help?</button>
@@ -176,27 +165,25 @@ const DeviceManagement = () => {
 
       <div ref={sidebarRef} className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
-          <h3>Device Control</h3>
+          <h3>Server Types</h3>
         </div>
-
         <div className="device-options">
           <div className="device-group">
             <button
-              className={`device-option ${selectedDevice === 'EMG' ? 'active' : ''}`}
-              onClick={() => handleDeviceClick('EMG')}
+              className={`device-option ${selectedType === 'AppServer' ? 'active' : ''}`}
+              onClick={() => handleTypeClick('AppServer')}
             >
-              <FaMicrochip className="option-icon" />
-              <span>EMG Devices</span>
+              <FaServer className="option-icon" />
+              <span>App Servers</span>
             </button>
           </div>
-
           <div className="device-group">
             <button
-              className={`device-option ${selectedDevice === 'EMS' ? 'active' : ''}`}
-              onClick={() => handleDeviceClick('EMS')}
+              className={`device-option ${selectedType === 'DBServer' ? 'active' : ''}`}
+              onClick={() => handleTypeClick('DBServer')}
             >
-              <FaBolt className="option-icon" />
-              <span>EMS Devices</span>
+              <FaDatabase className="option-icon" />
+              <span>DB Servers</span>
             </button>
           </div>
         </div>
@@ -204,44 +191,46 @@ const DeviceManagement = () => {
 
       <main className={`main-content ${isSidebarOpen ? 'shifted' : ''}`}>
         <div className="content-header">
-          <h1>{selectedDevice ? `${selectedDevice} Device Management` : 'Device Overview'}</h1>
+          <h1>{selectedType ? `${selectedType === 'AppServer' ? 'Application' : 'Database'} Servers` : 'Server Overview'}</h1>
         </div>
 
-        {selectedDevice ? (
+        {selectedType ? (
           <div className="device-dashboard">
             <div className="device-list">
-              <h2>Connected Devices</h2>
+              <h2>Connected Servers</h2>
               <div className="device-grid">
-                {[1, 2, 3].map((device) => (
-                  <div key={device} className="device-item">
-                    <div className="device-status online"></div>
-                    <h3>{selectedDevice} Device #{device}</h3>
-                    <p>Status: Active</p>
-                    <p>Last Active: 2 mins ago</p>
+                {servers[selectedType].map((server) => (
+                  <div key={server.id} className="device-item">
+                    <div className={`device-status ${server.status === 'Running' ? 'online' : 'offline'}`}></div>
+                    <h3>{server.name}</h3>
+                    <p>Status: <strong>{server.status}</strong></p>
+                    <p>Uptime: {server.uptime}</p>
+                    <p>Env: {server.env}</p>
+                    <p>Last Check: {server.lastCheck}</p>
                     <button className="device-action-btn">Manage</button>
                   </div>
                 ))}
               </div>
             </div>
-            <button className="btn" onClick={handleAddDeviceClick}>Add New Device</button>
+            <button className="btn" onClick={() => setShowAddServer(true)}>+ Add New Server</button>
             <div className="device-list">
-              <h2>Device Confirmation</h2>
+              <h2>Server Info</h2>
               <div className="device-info">
                 <h3 className="Name">Name:</h3>
-                <h3 className="Name">Model:</h3>
-                <h3 className="Name">Serial Number:</h3>
+                <h3 className="Name">IP Address:</h3>
+                <h3 className="Name">Environment:</h3>
               </div>
             </div>
           </div>
         ) : (
           <div className="welcome-message">
-            <h2>Welcome to Device Management</h2>
-            <p>Select a device type from the sidebar to begin</p>
+            <h2>Welcome to Server Management</h2>
+            <p>Select a server type from the sidebar to view instances</p>
           </div>
         )}
       </main>
 
-      {showAddDevice && renderAddDeviceModal()}
+      {showAddServer && renderAddServerModal()}
       {showManualEntry && renderManualEntryForm()}
     </div>
   );

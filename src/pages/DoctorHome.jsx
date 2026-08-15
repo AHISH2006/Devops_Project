@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../styles/doctorHome.css";
-import { FaArrowLeft, FaUser, FaFileAlt, FaComments, FaCog, FaQuestionCircle, FaSync, FaInfoCircle, FaSignOutAlt } from 'react-icons/fa';
+import { FaSignOutAlt } from 'react-icons/fa';
 import { FiMenu } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import { FaBell, FaTimes } from "react-icons/fa";
+import { FaBell } from "react-icons/fa";
 
 const DoctorHome = () => {
   const navigate = useNavigate();
@@ -28,21 +28,21 @@ const DoctorHome = () => {
   }, [isSidebarOpen]);
 
   const sidebarItems = [
-    { icon: "👤", title: "Accounts", path: '/Account' },
-    { icon: "📋", title: "Health Reports", path: '/reports' },
-    { icon: "💬", title: "Messages", path: '/messages' },
+    { icon: "👤", title: "Account", path: '/Account' },
+    { icon: "📋", title: "Deployment Reports", path: '/reports' },
+    { icon: "🔁", title: "Pipeline Status", path: '/pipeline' },
+    { icon: "🚀", title: "Deploy Build", path: '/deploy' },
+    { icon: "🌐", title: "Environments", path: '/environments' },
+    { icon: "🖥️", title: "Server Management", path: '/device-management' },
     { icon: "⚙️", title: "Settings", path: '/settings' },
     { icon: "❓", title: "Help", path: '/help' },
-    { icon: "📝", title: "Feedback", path: '/feedback' },
-    { icon: "🔄", title: "Check Updates", path: '/updates' },
-    { icon: "ℹ️", title: "About", path: '/about' },
     { icon: <FaSignOutAlt />, title: 'Logout', path: '/login' }
   ];
 
   const recentActivities = [
-    { icon: "🆕", title: "New Appointment", time: "2 mins ago" },
-    { icon: "📡", title: "Device Status Update", time: "1 hour ago" },
-    { icon: "📜", title: "Report Generated", time: "3 hours ago" }
+    { icon: "✅", title: "Build #47 Succeeded", time: "5 mins ago" },
+    { icon: "🚀", title: "Deployed to Production", time: "1 hour ago" },
+    { icon: "📋", title: "Deployment Report Generated", time: "3 hours ago" }
   ];
 
   const handleLogout = () => {
@@ -57,14 +57,14 @@ const DoctorHome = () => {
   return (
     <div className="doctor-home">
       <div className="top-nav">
-        <button 
+        <button
           ref={menuButtonRef}
           className="menu-icon-btn"
           onClick={() => setSidebarOpen(!isSidebarOpen)}
         >
           <FiMenu />
         </button>
-        <h2>Welcome</h2>
+        <h2>Admin Dashboard</h2>
         <FaBell className="notification-icon" />
       </div>
 
@@ -109,28 +109,28 @@ const DoctorHome = () => {
       </div>
 
       <div className={`main-content ${isSidebarOpen ? 'shifted' : ''}`}>
-        <p className="greeting">Have a great day ahead</p>
+        <p className="greeting">Welcome back, Admin 👋</p>
 
         <div className="stats-container">
-          <button className="stat-box">📅 Appointments</button>
-          <button  className="stat-box">
-          🌐 Active Devices
-          </button>
-          <button className="stat-box">👥 Total Patients</button>
-          <button className="stat-box">⏳ Hours Active</button>
+          <button onClick={() => navigate('/pipeline')} className="stat-box">🔁 Pipeline Runs</button>
+          <button onClick={() => navigate('/environments')} className="stat-box">🌐 Environments</button>
+          <button onClick={() => navigate('/device-management')} className="stat-box">🖥️ Servers</button>
+          <button onClick={() => navigate('/reports')} className="stat-box">📋 Reports</button>
         </div>
 
         <h3 className="section-title">Quick Actions</h3>
         <div className="quick-actions">
-          <button onClick={() => navigate("/EMG")} className="action-btn">
-            ⚙️ Device Control
+          <button onClick={() => navigate("/pipeline")} className="action-btn">
+            🔁 Pipeline Status
           </button>
-          <button onClick={() => navigate("/device-management", { state: { from: '/Doctorhome' } })} className="action-btn">📟Device Management</button>
-          <button onClick={() => navigate("/Account", { state: { from: '/Doctorhome' } })} className="action-btn">
-            👤 Accounts
+          <button onClick={() => navigate("/deploy")} className="action-btn">
+            🚀 Deploy Build
+          </button>
+          <button onClick={() => navigate("/environments")} className="action-btn">
+            🌐 Environments
           </button>
           <button onClick={() => navigate("/reports")} className="action-btn">
-            📄 View Reports
+            📋 View Reports
           </button>
         </div>
       </div>

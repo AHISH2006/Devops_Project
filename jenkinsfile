@@ -3,15 +3,22 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'akashessencecore/physio-app'
-        DOCKER_REGISTRY = 'docker.io' // Replace with your registry
+        DOCKER_REGISTRY = 'docker.io'
+        GIT_REPO_URL = 'https://github.com/AHISH2006/Devops_Project.git'
     }
 
     stages {
         stage('Clone Repository') {
             steps {
                 git branch: 'main',
-                git credentialsId: 'github-credentials',
-                    url: 'https://github.com/AkashEssencecore/physio.git'
+                    credentialsId: 'github-credentials',
+                    url: "${GIT_REPO_URL}"
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
             }
         }
 
@@ -25,20 +32,35 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                withCredentials([string(credentialsId: 'dockerhub-password', variable: 'DOCKERHUB_PASS')]) {
-                    script {
-                        docker.withRegistry("https://${DOCKER_REGISTRY}", 'dockerhub-credentials') {
-                            docker.image("${IMAGE_NAME}:latest").push()
-                        }
+                script {
+                    docker.withRegistry("https://${DOCKER_REGISTRY}", 'dockerhub-credentials') {
+                        docker.image("${IMAGE_NAME}:latest").push()
                     }
                 }
             }
         }
 
-        stage('Deploy (Optional)') {
+        stage('Deploy') {
             steps {
-                echo 'npm run dev'
+                script {
+                    echo "Deploying ${IMAGE_NAME}:latest to production..."
+                    sh """
+                        docker pull ${IMAGE_NAME}:latest
+                        docker stop physio-app || true
+                        docker rm physio-app || true
+                        docker run -d --name physio-app -p 80:80 ${IMAGE_NAME}:latest
+                    """
+                }
             }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Pipeline completed successfully!'
+        }
+        failure {
+            echo '❌ Pipeline failed. Check logs above.'
         }
     }
 }
