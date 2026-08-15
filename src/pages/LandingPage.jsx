@@ -1,8 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/auth.css";
-import logo from "../assets/Logo.png";
-
+import logo from "../assets/logo.png";
 
 const LandingPage = () => {
   const navigate = useNavigate(); // React Router navigation hook
@@ -11,7 +10,7 @@ const LandingPage = () => {
     <div className="container">
       <img src={logo} alt="Essencecore Logo" className="logo" />
       <button className="btn" onClick={() => navigate("/login")}>
-        Get Started
+       Get Started
       </button>
     </div>
   );
