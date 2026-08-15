@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/auth.css";
-import logo from "../assets/logo.png";
+import logo from "../assets/Logo.png";
 import InputField from "../components/InputField";
 import Button from "../components/Button";
 
