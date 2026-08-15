@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     environment {
-        FRONTEND_IMAGE = 'ahish2006/devops-frontend'
-        BACKEND_IMAGE  = 'ahish2006/devops-backend'
+        FRONTEND_IMAGE  = 'ahish2006/devops-frontend'
         DOCKER_REGISTRY = 'docker.io'
         GIT_REPO_URL    = 'https://github.com/AHISH2006/Devops_Project.git'
     }
@@ -24,13 +23,19 @@ pipeline {
             }
         }
 
-        stage('Lint') {
+        stage('Lint & Check') {
             steps {
                 sh 'npm run lint || true'
             }
         }
 
-        stage('Build Frontend Docker Image') {
+        stage('Build React Production Artifact') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+
+        stage('Build Docker Image') {
             steps {
                 script {
                     docker.build("${FRONTEND_IMAGE}:${BUILD_NUMBER}", "-f Dockerfile .")
@@ -39,38 +44,25 @@ pipeline {
             }
         }
 
-        stage('Build Backend Docker Image') {
-            steps {
-                script {
-                    docker.build("${BACKEND_IMAGE}:${BUILD_NUMBER}", "-f backend/Dockerfile ./backend")
-                    docker.build("${BACKEND_IMAGE}:latest", "-f backend/Dockerfile ./backend")
-                }
-            }
-        }
-
-        stage('Push Images to Docker Hub') {
+        stage('Push Image to Docker Hub') {
             steps {
                 script {
                     docker.withRegistry("https://${DOCKER_REGISTRY}", 'dockerhub-credentials') {
-                        // Push frontend with build number tag AND latest
                         docker.image("${FRONTEND_IMAGE}:${BUILD_NUMBER}").push()
                         docker.image("${FRONTEND_IMAGE}:latest").push()
-                        // Push backend with build number tag AND latest
-                        docker.image("${BACKEND_IMAGE}:${BUILD_NUMBER}").push()
-                        docker.image("${BACKEND_IMAGE}:latest").push()
                     }
                 }
             }
         }
 
-        stage('Deploy with Docker Compose') {
+        stage('Deploy Frontend Container') {
             steps {
                 script {
-                    echo "Deploying build #${BUILD_NUMBER} using Docker Compose..."
+                    echo "Deploying Frontend build #${BUILD_NUMBER}..."
                     sh """
-                        docker-compose pull
-                        docker-compose up -d --remove-orphans
-                        docker-compose ps
+                        docker stop devops-frontend || true
+                        docker rm devops-frontend || true
+                        docker run -d --name devops-frontend -p 80:80 ${FRONTEND_IMAGE}:latest
                     """
                 }
             }
@@ -80,10 +72,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ Build #${BUILD_NUMBER} deployed successfully!"
+            echo "✅ Frontend Build #${BUILD_NUMBER} deployed successfully!"
         }
         failure {
-            echo "❌ Build #${BUILD_NUMBER} failed. Check the logs above."
+            echo "❌ Frontend Build #${BUILD_NUMBER} failed. Check logs above."
         }
         always {
             sh 'docker image prune -f || true'
