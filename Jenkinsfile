@@ -2,43 +2,46 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = 'akashessencecore/physio-app'
-        DOCKER_REGISTRY = 'docker.io' // Replace with your registry
+        IMAGE_NAME = 'ahish2006/physio_app'
     }
 
     stages {
-        stage('Clone Repository') {
+
+        stage('Build React Application') {
             steps {
-                git branch: 'main',
-                git credentialsId: 'github-credentials',
-                    url: 'https://github.com/AkashEssencecore/physio.git'
+                echo 'Installing dependencies and building React application...'
+
+                bat 'npm install'
+                bat 'npm run build'
             }
         }
 
         stage('Build Docker Image') {
             steps {
+                echo 'Building Docker image...'
+
                 script {
-                    docker.build("${IMAGE_NAME}:latest")
+                    bat "docker build -t ${IMAGE_NAME}:latest ."
                 }
             }
         }
 
-        stage('Push Docker Image') {
+        stage('Docker Image Test') {
             steps {
-                withCredentials([string(credentialsId: 'dockerhub-password', variable: 'DOCKERHUB_PASS')]) {
-                    script {
-                        docker.withRegistry("https://${DOCKER_REGISTRY}", 'dockerhub-credentials') {
-                            docker.image("${IMAGE_NAME}:latest").push()
-                        }
-                    }
-                }
+                echo 'Docker image created successfully.'
+
+                bat 'docker images'
             }
         }
+    }
 
-        stage('Deploy (Optional)') {
-            steps {
-                echo 'npm run dev'
-            }
+    post {
+        success {
+            echo 'CI Pipeline completed successfully!'
+        }
+
+        failure {
+            echo 'CI Pipeline failed. Check the console output.'
         }
     }
 }
