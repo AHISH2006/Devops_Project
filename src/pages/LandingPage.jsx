@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/auth.css";
-import logo from "../assets/logo.png";
+import logo from "../assets/Logo.png";
 
 const LandingPage = () => {
   const navigate = useNavigate(); // React Router navigation hook
